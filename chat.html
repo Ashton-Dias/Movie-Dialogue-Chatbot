@@ -1,0 +1,35 @@
+<!-- templates/chat.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        body { font-family: Arial; padding: 40px; }
+        input { width: 60%; padding: 10px; }
+        button { padding: 10px 20px; }
+        #chatbox { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <input id="message" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+    <div id="chatbox"></div>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById("message").value;
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+            const div = document.createElement('div');
+            div.innerHTML = `<b>You:</b> ${message}<br><b>Bot:</b> ${data.response}<br><br>`;
+            document.getElementById("chatbox").prepend(div);
+            document.getElementById("message").value = '';
+        }
+    </script>
+</body>
+</html>
